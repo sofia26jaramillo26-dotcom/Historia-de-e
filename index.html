@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Número e: Historia y Funciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Menú lateral */
+        .menu-lateral {
+            width: 280px;
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #3498db;
+        }
+
+        .logo span {
+            font-weight: 700;
+            color: #e74c3c;
+        }
+
+        .nav-menu {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 16px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background-color: #34495e;
+        }
+
+        .nav-item.active {
+            background-color: #1a252f;
+            border-left: 4px solid #3498db;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Contenido principal */
+        .contenido-principal {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .seccion {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .seccion.activa {
+            display: block;
+        }
+
+        .titulo-seccion {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        /* Historia */
+        .historia-contenido {
+            max-width: 900px;
+            line-height: 1.7;
+        }
+
+        .historia-parrafo {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .formula-destacada {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .formula {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.3rem;
+            color: #2c3e50;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .matematico {
+            font-weight: 600;
+            color: #2980b9;
+        }
+
+        /* Evaluador de funciones */
+        .evaluador-contenido {
+            max-width: 700px;
+        }
+
+        .panel-codigo {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+
+        .codigo {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .comentario {
+            color: #7f8c8d;
+        }
+
+        .numero-e {
+            background-color: #e8f8f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #a3e4d7;
+        }
+
+        .numero-e .valor {
+            font-size: 2rem;
+            color: #16a085;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .calculadora {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-calcular {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-calcular:hover {
+            background-color: #2980b9;
+        }
+
+        .resultado {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: none;
+        }
+
+        .resultado.visible {
+            display: block;
+        }
+
+        .resultado-titulo {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .resultado-valor {
+            font-size: 1.3rem;
+            color: #16a085;
+            font-weight: bold;
+        }
+
+        .funcion-formula {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .menu-lateral {
+                width: 100%;
+                height: auto;
+            }
+            
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 0;
+            }
+            
+            .nav-item {
+                flex-shrink: 0;
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            
+            .nav-item.active {
+                border-left: none;
+                border-bottom: 4px solid #3498db;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú lateral -->
+    <div class="menu-lateral">
+        <div class="logo">
+            <h1>Número <span>e</span></h1>
+            <p>Historia y funciones</p>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item active" data-target="historia">
+                <div class="nav-icon">📜</div>
+                <div>Historia del Número e</div>
+            </div>
+            
+            <div class="nav-item" data-target="funciones">
+                <div class="nav-icon">📐</div>
+                <div>Evaluación de Funciones</div>
+            </div>
+        </div>
+        
+        <div style="padding: 20px; text-align: center; font-size: 0.9rem; color: #95a5a6;">
+            e ≈ 2.718281828459045
+        </div>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="contenido-principal">
+        <!-- Sección Historia -->
+        <div class="seccion activa" id="historia">
+            <h1 class="titulo-seccion">Historia del Número e</h1>
+            
+            <div class="historia-contenido">
+                <p class="historia-parrafo">
+                    El número <strong>e</strong>, aproximadamente 2.71828, emergió en el siglo XVII de manera independiente en trabajos sobre logaritmos y cálculo. <span class="matematico">John Napier</span>, en su creación de los logaritmos (1614), aunque no identificó explícitamente e, estableció bases que llevarían a su descubrimiento. Posteriormente, <span class="matematico">Jacob Bernoulli</span> estudió el problema del interés compuesto continuo, al analizar el límite:
+                </p>
+                
+                <div class="formula-destacada">
+                    <div class="formula">lim<sub>n→∞</sub> (1 + 1/n)<sup>n</sup> = e</div>
+                </div>
+                
+                <p class="historia-parrafo">
+                    tocando directamente la esencia de e sin nombrarlo aún.
+                </p>
+                
+                <p class="historia-parrafo">
+                    La primera referencia explícita a e como constante matemática aparece en 1683 con <span class="matematico">Gottfried Wilhelm Leibniz</span> en correspondencia con <span class="matematico">Christiaan Huygens</span>, aunque fue <span class="matematico">Leonhard Euler</span> quien la popularizó y le dio su nombre en el siglo XVIII. En su trabajo <em>"Introductio in analysin infinitorum"</em> (1748), Euler definió e como lim<sub>n→∞</sub> (1 + 1/n)<sup>n</sup>, desarrolló su expansión en serie:
+                </p>
+                
+                <div class="formula-destacada">
+                    <div class="formula">e = Σ<sub>n=0</sub><sup>∞</sup> 1/n!</div>
+                </div>
+                
+                <p class="historia-parrafo">
+                    y demostró su conexión fundamental con la función exponencial, logaritmos naturales, y la famosa identidad:
+                </p>
+                
+                <div class="formula-destacada">
+                    <div class="formula">e<sup>iπ</sup> + 1 = 0</div>
+                </div>
+                
+                <p class="historia-parrafo">
+                    Hoy, e es una de las constantes más importantes en matemáticas, física e ingeniería. Aparece en crecimiento exponencial, ecuaciones diferenciales, análisis complejo, teoría de probabilidades (distribución normal), y en la descripción de fenómenos naturales como la desintegración radiactiva. Su historia refleja cómo conceptos surgidos de problemas prácticos se transforman en pilares del pensamiento matemático abstracto.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Sección Funciones -->
+        <div class="seccion" id="funciones">
+            <h1 class="titulo-seccion">Evaluación de Funciones con e</h1>
+            
+            <div class="evaluador-contenido">
+                <div class="panel-codigo">
+                    <h3>El número e en Python</h3>
+                    <p>En Python, podemos obtener el valor de e usando la biblioteca math:</p>
+                    
+                    <div class="codigo">
+                        <span class="comentario"># Importar la biblioteca matemática</span><br>
+                        import math<br><br>
+                        
+                        <span class="comentario"># Obtener el valor de e</span><br>
+                        x = math.exp(1)<br>
+                        print(f"e ≈ {x:.4f}")<br><br>
+                        
+                        <span class="comentario"># Resultado: e ≈ 2.7183</span>
+                    </div>
+                </div>
+                
+                <div class="numero-e">
+                    <div>Valor aproximado del número e:</div>
+                    <div class="valor" id="valor-e">2.718281828459045</div>
+                    <div>Precisión: 15 decimales</div>
+                </div>
+                
+                <div class="calculadora">
+                    <h3>Evaluar función con e</h3>
+                    <p>Consideremos la siguiente función que utiliza e:</p>
+                    
+                    <div class="funcion-formula">
+                        f(x) = 1 / (2 + e<sup>x</sup>)
+                    </div>
+                    
+                    <p>Ingresa un valor para x y calcula f(x):</p>
+                    
+                    <div class="input-group">
+                        <label for="valor-x">Valor de x:</label>
+                        <input type="number" id="valor-x" step="any" value="4" placeholder="Ingresa un número">
+                    </div>
+                    
+                    <button class="btn-calcular" id="btn-calcular">Calcular f(x)</button>
+                    
+                    <div class="resultado" id="resultado">
+                        <div class="resultado-titulo">Resultado:</div>
+                        <div class="funcion-formula">
+                            f(<span id="x-valor">4</span>) = 1 / (2 + e<sup><span id="x-exponente">4</span></sup>)
+                        </div>
+                        <div class="resultado-valor" id="resultado-valor">0.0183</div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            Nota: e<sup><span id="exp-display">4</span></sup> ≈ <span id="e-exp">54.598150033144236</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navegación entre secciones
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remover clase active de todos los items
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Agregar clase active al item clickeado
+                this.classList.add('active');
+                
+                // Ocultar todas las secciones
+                document.querySelectorAll('.seccion').forEach(seccion => {
+                    seccion.classList.remove('activa');
+                });
+                
+                // Mostrar la sección correspondiente
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('activa');
+            });
+        });
+        
+        // Evaluador de funciones
+        document.getElementById('btn-calcular').addEventListener('click', calcularFuncion);
+        document.getElementById('valor-x').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                calcularFuncion();
+            }
+        });
+        
+        // Valor de e (con mayor precisión que Math.E)
+        const e = Math.exp(1);
+        document.getElementById('valor-e').textContent = e.toFixed(15);
+        
+        function calcularFuncion() {
+            const inputX = document.getElementById('valor-x');
+            const x = parseFloat(inputX.value);
+            
+            if (isNaN(x)) {
+                alert('Por favor ingresa un número válido para x');
+                inputX.focus();
+                return;
+            }
+            
+            // Calcular e^x
+            const ePowX = Math.exp(x);
+            
+            // Calcular la función f(x) = 1 / (2 + e^x)
+            const resultado = 1 / (2 + ePowX);
+            
+            // Actualizar la interfaz
+            document.getElementById('x-valor').textContent = x;
+            document.getElementById('x-exponente').textContent = x;
+            document.getElementById('exp-display').textContent = x;
+            document.getElementById('e-exp').textContent = ePowX.toFixed(12);
+            document.getElementById('resultado-valor').textContent = resultado.toFixed(6);
+            
+            // Mostrar el resultado
+            document.getElementById('resultado').classList.add('visible');
+            
+            // Resaltar el input
+            inputX.style.borderColor = '#3498db';
+        }
+        
+        // Calcular automáticamente al cargar la página (con x=4 como en el ejemplo)
+        window.addEventListener('DOMContentLoaded', function() {
+            calcularFuncion();
+        });
+    </script>
+</body>
+</html>
